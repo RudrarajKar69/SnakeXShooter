@@ -19,6 +19,7 @@ public class DifficultyScreen extends JPanel implements ActionListener{
 	int x = 0,command=0;
 	Game next;
 	
+	//Constructor that accepts only the window
 	DifficultyScreen(Window k)
 	{
 		this.k=k;
@@ -26,16 +27,20 @@ public class DifficultyScreen extends JPanel implements ActionListener{
 		timer = new Timer(200,this);
 		timer.start();
 	}
+	
+	//Constructor that accepts both the window and the difficulty level
 	DifficultyScreen(Window k,String difficulty)
 	{
 		this.k=k;
 		this.setBackground(Color.black);
-		if(difficulty == "Easy")
-			command = 0;
-		if(difficulty == "Medium")
-			command = 1;
-		if(difficulty == "Hard")
-			command = 2;
+		
+		if(difficulty == "Easy")	//
+			command = 0;		//
+		if(difficulty == "Medium")	// This part automatically sets the difficulty 
+			command = 1;		// based on the difficulty accepted by it
+		if(difficulty == "Hard")	//
+			command = 2;		//
+		
 		timer = new Timer(200,this);
 		timer.start();
 	}
@@ -62,13 +67,14 @@ public class DifficultyScreen extends JPanel implements ActionListener{
 		g.setColor(Color.white);
 		g.drawString(text, x, y);
 		
-		//Image
+		//Displays the difficulty options
+		
 		g.setFont(g.getFont().deriveFont(Font.BOLD,40F));
 		text="Easy";
 		x=getXforCenteredText(text,g);
 		y+=(Game.SCREEN_HEIGHT)/4;
 		g.drawString(text, x, y);
-		if(command==0)
+		if(command==0)	//Sets the arrow based on the difficulty selected
 			g.drawString(">", x-(Game.SCREEN_HEIGHT)/2, y);
 		
 		text="Medium";
@@ -90,6 +96,7 @@ public class DifficultyScreen extends JPanel implements ActionListener{
 			g.drawString(">", x-(Game.SCREEN_HEIGHT)/2, y);
 
 	}
+	
 	private int getXforCenteredText(String text,Graphics g2) {
 		int length = (int) g2.getFontMetrics().getStringBounds(text, g2).getWidth();
 		int x = Game.SCREEN_WIDTH/2-length/2;
@@ -98,6 +105,7 @@ public class DifficultyScreen extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//Gets key input using the window instance passed to it
 		KeyEvent e1 = k.getkeyPressed();
 		if(e1!=null)
 		{
@@ -112,7 +120,7 @@ public class DifficultyScreen extends JPanel implements ActionListener{
 					command++;
 				break;
 			case KeyEvent.VK_ENTER:
-				if(command==0) {
+				if(command==0) 
 					{	
 						next=new Game(k,"Easy");
 						k.add(next);
@@ -120,8 +128,7 @@ public class DifficultyScreen extends JPanel implements ActionListener{
 						timer.stop();
 						k.remove(this);
 					}
-				}
-				if(command==1) {
+				if(command==1) 
 					{	
 						next=new Game(k,"Medium");
 						k.add(next);
@@ -129,8 +136,7 @@ public class DifficultyScreen extends JPanel implements ActionListener{
 						timer.stop();
 						k.remove(this);
 					}
-				}
-				if(command==2) {
+				if(command==2) 
 					{	
 						next=new Game(k,"Hard");
 						k.add(next);
@@ -138,7 +144,6 @@ public class DifficultyScreen extends JPanel implements ActionListener{
 						timer.stop();
 						k.remove(this);
 					}
-				}
 				break;
 			}
 		}
