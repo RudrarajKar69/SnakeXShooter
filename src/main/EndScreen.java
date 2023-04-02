@@ -134,4 +134,5 @@ public class EndScreen extends JPanel implements ActionListener {
     	}
     	// Redraw the screen
     	repaint();
+	}
 }
