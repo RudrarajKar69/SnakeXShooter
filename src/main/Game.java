@@ -165,13 +165,13 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 		if(bulletID!=null) //If the goal needed to shoot bullets is achieved
 		{
 			if(player_direction=="right")
-				objects.add(new Bullet(((player_x/tileSize)+2)*tileSize, player_y, tileSize, tileSize,false,ok, bulletImage, maxRows, maxCols, tileSize,player_direction, enemy));
+				objects.add(new Bullet(((player_x/tileSize)+2)*tileSize, player_y, tileSize, tileSize,false,bulletID, bulletImage, maxRows, maxCols, tileSize,player_direction, enemy));
 			if(player_direction=="down")
-				objects.add(new Bullet(player_x, ((player_y/tileSize)+3)*tileSize, tileSize, tileSize,false,ok, bulletImage, maxRows, maxCols, tileSize,player_direction, enemy));
+				objects.add(new Bullet(player_x, ((player_y/tileSize)+3)*tileSize, tileSize, tileSize,false,bulletID, bulletImage, maxRows, maxCols, tileSize,player_direction, enemy));
 			if(player_direction=="left")
-				objects.add(new Bullet(((player_x/tileSize)-3)*tileSize, player_y, tileSize, tileSize,false,ok, bulletImage, maxRows, maxCols, tileSize,player_direction, enemy));
+				objects.add(new Bullet(((player_x/tileSize)-3)*tileSize, player_y, tileSize, tileSize,false,bulletID, bulletImage, maxRows, maxCols, tileSize,player_direction, enemy));
 			if(player_direction=="up")
-				objects.add(new Bullet(player_x, ((player_y/tileSize)-3)*tileSize, tileSize, tileSize,false,ok, bulletImage, maxRows, maxCols, tileSize,player_direction, enemy));
+				objects.add(new Bullet(player_x, ((player_y/tileSize)-3)*tileSize, tileSize, tileSize,false,bulletID, bulletImage, maxRows, maxCols, tileSize,player_direction, enemy));
 		}
 	}
 
