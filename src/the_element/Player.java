@@ -7,11 +7,11 @@ import java.util.ArrayList;
 public class Player extends GameObject{
 	
 	int speedx,speedy,length=1,foodx,foody;
-	public int NO_Eaten=0;
-	ArrayList<Integer> x,y;
-	ArrayList<GameObject> enemies;
-	String directions;
-	public boolean eaten=false;
+	public int NO_Eaten=0; //Saves no of apples eaten
+	ArrayList<Integer> x,y; //List that stores the x and y position of the snake's body parts
+	ArrayList<GameObject> enemies; //List that stores the enemies in the screen
+	String directions; //Direction of the player
+	public boolean eaten=false; //Checks if player has eaten an apple or not
 	
 	public void setObjects(ArrayList<GameObject> enemies) {
 		this.enemies = enemies;
@@ -67,9 +67,10 @@ public class Player extends GameObject{
 		}
 	}
 
-	
+	//Checks for wall and enemies
 	void WallChecker()
 	{
+		//Reverses the player's direction if it collides with a screen boundary
 		if(getX()==0 && getSpeedX()<0)
 			setSpeedX(getSpeedX()*-1);
 		if(getX()>=(getCols()*getTileSize())-getWidth() && getSpeedX()>0)
@@ -79,7 +80,7 @@ public class Player extends GameObject{
 		if(getY()>=(getRows()*getTileSize())-getHeight() && getSpeedY()>0)
 			setSpeedY(getSpeedY()*-1);
 		
-		for(GameObject x:enemies)
+		for(GameObject x:enemies) //Loops through all the enemy in the list enemies and see if the player collides with their tile
 		{
 			if(getX()/getTileSize()==x.getX()/x.getTileSize() && getY()/getTileSize()==x.getY()/x.getTileSize())
 			{
@@ -89,14 +90,15 @@ public class Player extends GameObject{
 		}
 	}
 	
+	//Shortens the snake if it collides with itself
 	void shortening()
 	{
 		boolean a=true;
-		int tech=0;
+		int tech=0; //Stores the part of the snake body where the snake's head has collided
 		
 		for(int i=1;i<x.size();i++)
 		{
-			if(getX()==x.get(i) && getY() == y.get(i))
+			if(getX()==x.get(i) && getY() == y.get(i)) //If the snake collides with itself
 			{
 				if(i>2)
 				{
@@ -115,8 +117,8 @@ public class Player extends GameObject{
 			if(length>1)
 			{
 				length=tech;
-				x.subList(length, x.size()-1).clear();
-				y.subList(length,y.size()-1).clear();
+				x.subList(length, x.size()-1).clear(); //Reduces the size of the snake body
+				y.subList(length,y.size()-1).clear();  //Reduces the size of the snake body
 			}
 		}
 	}
@@ -126,6 +128,7 @@ public class Player extends GameObject{
 		if(!isDead())
 		{
 			shortening();
+			//Updates the snake body
 			for(int i =x.size()-1;i>0;i--) {
 				x.set(i, x.get(i-1));
 				y.set(i, y.get(i-1));
@@ -137,6 +140,7 @@ public class Player extends GameObject{
 			setX(getX()+getSpeedX());
 			setY(getY()+getSpeedY());
 			
+			//Checks if player collides with food
 			if(getX()/getTileSize()==foodx/getTileSize() && getY()/getTileSize()==foody/getTileSize())
 			{
 				length++;
@@ -146,8 +150,8 @@ public class Player extends GameObject{
 				NO_Eaten++;
 			}
 			
-			x.set(0,getX());
-			y.set(0, getY());
+			x.set(0,getX()); //Sets the first index of list `x` to the position of the snake's head
+			y.set(0, getY()); //Sets the first index of list `y` to the position of the snake's head
 		}
 	}
 
