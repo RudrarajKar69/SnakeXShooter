@@ -15,9 +15,9 @@ import javax.swing.Timer;
 @SuppressWarnings("serial")
 public class Pause extends JPanel implements ActionListener{
 	
-	Timer timer;
-	Window k;
-	int x = 0,command=0;
+	Timer timer; //Timer to do animation
+	Window k; 
+	int x = 0,command=0; //x position for the labels and command to store the option chosen by the user
 	Game next;
 	
 	Pause(Window k,Game g)
@@ -38,7 +38,7 @@ public class Pause extends JPanel implements ActionListener{
 	
 	void draw(Graphics g)
 	{	
-//		g.fillRect(x,((Game.SCREEN_HEIGHT)/2)-25, 50, 50);
+		//Draws the text paused
 		g.setFont(g.getFont().deriveFont(Font.BOLD,96F));
 		String text = "PAUSED!";
 		int x=getXforCenteredText(text,g),y=(Game.SCREEN_HEIGHT)/4;
@@ -83,6 +83,7 @@ public class Pause extends JPanel implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		//Key Input
 		KeyEvent e1 = k.getkeyPressed();
 		if(e1!=null)
 		{
@@ -112,4 +113,3 @@ public class Pause extends JPanel implements ActionListener{
 		repaint();
 	}
 }
-
