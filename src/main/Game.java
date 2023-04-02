@@ -25,16 +25,16 @@ import the_element.Player;
 @SuppressWarnings("serial")
 public class Game extends JLabel implements ActionListener,MouseListener{
 
-	ArrayList<GameObject> objects,enemy;
-	Timer timer;
-	Image[] playerImage = new Image[2],enemyImage = new Image[1],bulletImage = new Image[3];
-	Image floor,food;
+	ArrayList<GameObject> objects,enemy; //List of gameobjects and enemies
+	Timer timer; //Timer for animation
+	Image[] playerImage = new Image[2],enemyImage = new Image[1],bulletImage = new Image[3]; //Array to store images
+	Image floor,food; //Store images
 	Random rnd;
 	EndScreen next;
-	ID ok;
+	ID bulletID;
 
 	public static final int original_tileSize = 16;
-	public static final int Scaler = 4;
+	public static final int Scaler = 4; //This can be changed to zoom in and out
 	public static final int tileSize = original_tileSize*Scaler;
 	
 	public static final int maxRows=10;
@@ -45,13 +45,13 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 	
 	int player_x=0,player_y=0,indi=-1,foodX,foodY,bullet_x=-1,bullet_y=-1,score;
 	int No_Of_Enemies;
-	int[] ex,ey;
+	int[] ex,ey; //Array to store the x and y position of all the enemies in the screen
 	String player_direction="",difficulty;
 
 	Window k;	
 	Game(Window k,String difficulty)
 	{
-		ok=null;
+		bulletID=null; //Set to null so that unless a goal is reached, no bullet is released
 		this.k=k;
 		this.difficulty=difficulty;
 		objects = new ArrayList<GameObject>();
@@ -59,6 +59,7 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 		
 		rnd=new Random();
 		
+		//Decides the random no. of enemies that should spawn based on difficulty
 		if(this.difficulty=="Easy")
 			No_Of_Enemies=rnd.nextInt(5)+5;
 		if(this.difficulty=="Medium")
@@ -75,6 +76,7 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 		timer=new Timer(150,this);
 		timer.start();
 		
+		//Loads the images
 		playerImage[0]=new ImageIcon(getClass().getClassLoader().getResource("PLAYER.png")).getImage();
 		playerImage[1]=new ImageIcon(getClass().getClassLoader().getResource("Player-1.png")).getImage();
 		
@@ -87,6 +89,7 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 		floor = new ImageIcon(getClass().getClassLoader().getResource("Floor1.png")).getImage();
 		food = new ImageIcon(getClass().getClassLoader().getResource("Food.png")).getImage();
 		
+		//Spawns random number of enemies at random location
 		for(int i=0;i<No_Of_Enemies;i++)
 		{
 			ex[i]=rnd.nextInt(maxCols)*tileSize;
@@ -105,6 +108,7 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 	 {
 		 super.paintComponent(g);
 		 
+		 //Draws the floor image on every tile
 		 for(int i=0;i<maxCols;i++)
 		 {
 			 for(int j=0;j<maxRows;j++)
@@ -112,12 +116,15 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 				 g.drawImage(floor,i*tileSize, j*tileSize, tileSize,tileSize,null);
 			 }
 		 }
-//		 g.drawImage(floor, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, null);
-		
-//		 grid(g);
+		 //Draws image of floor one time throughout the screen
+		 //g.drawImage(floor, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT, null);
+		 
+		 //Draws grid
+		 //grid(g);
 		 
 		 drawApple(g);
 	     
+		 //Loops through the list of game objects and calls the draw method of all the objects
 		 for(GameObject x : objects){
 				x.draw(g);
 			}
@@ -127,14 +134,16 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 	{
 		g.setColor(Color.white);
 		 // draw vertical lines
-	    for (int i = 0; i <= maxCols; i++) {
-	        g.drawLine(i * tileSize, 00, i * tileSize, maxRows * tileSize);
-	    }
+		for (int i = 0; i <= maxCols; i++) 
+		{
+	        	g.drawLine(i * tileSize, 00, i * tileSize, maxRows * tileSize);
+		}
 	
-	    // draw horizontal lines
-	    for (int i = 0; i <= maxRows; i++) {
-	        g.drawLine(0, i * tileSize, maxCols * tileSize, i * tileSize);
-	    }
+	    	// draw horizontal lines
+	    	for (int i = 0; i <= maxRows; i++)
+		{
+	        	g.drawLine(0, i * tileSize, maxCols * tileSize, i * tileSize);
+	    	}
 	}
 	 
 	void newApple()
@@ -149,14 +158,11 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 	}
 	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
+	public void mouseClicked(MouseEvent e) {}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		if(ok!=null)
+		if(bulletID!=null) //If the goal needed to shoot bullets is achieved
 		{
 			if(player_direction=="right")
 				objects.add(new Bullet(((player_x/tileSize)+2)*tileSize, player_y, tileSize, tileSize,false,ok, bulletImage, maxRows, maxCols, tileSize,player_direction, enemy));
@@ -178,6 +184,7 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 	@Override
 	public void mouseExited(MouseEvent e) {}
 
+	//Sets player's direction based on key input
 	void PlayerMover(Player p,KeyEvent e1)
 	{
 		Player temp = (Player) p;
@@ -229,8 +236,9 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+		
 		KeyEvent e1 = k.getkeyPressed();
+		//If the player is dead it is true else false
 		boolean ENDED=false;
 		for(GameObject x : objects){
 			if(x.getId()==ID.Player)
@@ -241,12 +249,14 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 					{
 						Player temp = (Player) x;
 						PlayerMover(temp,e1);
+						
 						if(temp.NO_Eaten>3)
-							ok=ID.Bullet;
+							bulletID=ID.Bullet; 
 						if(temp.NO_Eaten>5)
-							ok=ID.Bullet1;
+							bulletID=ID.Bullet1;
 						if(temp.NO_Eaten>8)
-							ok=ID.Bullet2;
+							bulletID=ID.Bullet2;
+						
 						score=temp.NO_Eaten;
 					}
 					else if(x.isDead())
@@ -277,8 +287,8 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 				if(x.isDead())
 				{
 					indi = objects.indexOf(x);
-					enemy.remove(x);
-					No_Of_Enemies--;
+					enemy.remove(x); //Remove the enemy from the list of enemies
+					No_Of_Enemies--; //Reduces the no. of enemies if it is dead
 					break;
 				}
 				else
@@ -290,14 +300,14 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 						temp.setBy(bullet_y);
 				}
 			}
-			x.update();
+			x.update();//Updates all the game objects
 		}
-		if(indi>=0)
+		if(indi>=0) //If indi contains the index of any gameobjects that needs to be removed
 		{
 			objects.remove(indi);
 			indi=-1;
 		}
-		if(ENDED)
+		if(ENDED) //If the player is dead
 		{
 			next=new EndScreen(k, difficulty);
 			k.add(next);
@@ -305,7 +315,7 @@ public class Game extends JLabel implements ActionListener,MouseListener{
 			timer.stop();
 			k.remove(this);
 		}
-		if(No_Of_Enemies<=0)
+		if(No_Of_Enemies<=0) //If all the enemies are killed
 		{
 			WinScreen temp;
 			temp=new WinScreen(k,difficulty,score);
